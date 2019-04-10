@@ -11,10 +11,10 @@
 <div style="position:relative;"><img id= 'img3' src="v_53.png"></div>
 <div style="position:relative;"><img id= 'img4' src="v_54.png"></div>
 
-<script type="text/javascript" src="js/face-api.js/dist/face-api.js"></script>
+<script type="text/javascript" src="js/face-api.js"></script>
 <script type="text/javascript">
 async function f(){
-	var path = 'js/face-api.js/models';
+	var path = 'js/models';
 	await faceapi.loadSsdMobilenetv1Model(path)
 	await faceapi.loadFaceLandmarkModel(path)
 	await faceapi.loadFaceRecognitionModel(path)
