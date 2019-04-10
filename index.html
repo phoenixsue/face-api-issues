@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+       <title>My Tube</title>
+</head>
+<body>
+
+<div style="position:relative;"><img id= 'img1' src="v_33.png"></div>
+<div style="position:relative;"><img id= 'img2' src="v_37.png"></div>
+<div style="position:relative;"><img id= 'img3' src="v_53.png"></div>
+<div style="position:relative;"><img id= 'img4' src="v_54.png"></div>
+
+<script type="text/javascript" src="js/face-api.js/dist/face-api.js"></script>
+<script type="text/javascript">
+async function f(){
+	var path = 'js/face-api.js/models';
+	await faceapi.loadSsdMobilenetv1Model(path)
+	await faceapi.loadFaceLandmarkModel(path)
+	await faceapi.loadFaceRecognitionModel(path)
+	faceapi.env.monkeyPatch({
+		Canvas: HTMLCanvasElement,
+		Image: HTMLImageElement,
+		ImageData: ImageData,
+		Video: HTMLVideoElement,
+		createCanvasElement: () => document.createElement('canvas'),
+		createImageElement: () => document.createElement('img')
+	});
+	var imgs = document.querySelectorAll('img');
+	imgs.forEach(async function(img){
+		const unkFaces = await faceapi.detectAllFaces(img)
+				.withFaceLandmarks().withFaceDescriptors();
+		//console.log(unkFaces[0].descriptor)
+		var parent = img.parentNode;
+		unkFaces.forEach(function(face){
+			var box = face.detection.box;
+			var div = document.createElement('div');
+			div.style.position = 'absolute';
+			div.style.left = box.left + 'px';
+			div.style.top = box.top + 'px';
+			div.style.width = box.width + 'px';
+			div.style.height = box.height + 'px';
+			div.style.border = '2px solid green';
+			parent.appendChild(div)
+			div.addEventListener('mouseenter', function(){
+				alert(face.descriptor)
+			});
+		});
+	});
+}
+	f()
+</script>
+</body>
